@@ -1,0 +1,58 @@
+package com.inventario.gestion.controller;
+
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.inventario.gestion.dto.UsuarioRequestDto;
+import com.inventario.gestion.dto.UsuarioResponseDto;
+import com.inventario.gestion.service.UsuarioService;
+
+import jakarta.validation.Valid;
+
+@RestController 
+@RequestMapping("/usuario")
+public class UsuarioController {
+
+    private final UsuarioService usuarioService;
+
+    public UsuarioController(UsuarioService usuarioService){
+        this.usuarioService = usuarioService;
+    }
+
+    @GetMapping("/obtener")
+    ResponseEntity<List<UsuarioResponseDto>> obtener(){
+        return ResponseEntity.ok().body(usuarioService.obtenerTodos());
+    }
+
+    @GetMapping("/obtener/{id}")
+    ResponseEntity<UsuarioResponseDto> obtener(@PathVariable Long id){
+        return ResponseEntity.ok().body(usuarioService.obtenerPorId(id));
+    }
+    
+    @PostMapping("/crear")
+    ResponseEntity<UsuarioResponseDto> crear(@Valid @RequestBody UsuarioRequestDto dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.crear(dto));
+    }
+    
+    @PatchMapping("/borrar-logico/{id}")
+    ResponseEntity<UsuarioResponseDto> borrarL(@PathVariable Long id){
+        usuarioService.borrarLogico(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @DeleteMapping("/borrar/{id}")
+    ResponseEntity<Void> borrarF(@PathVariable Long id){
+        usuarioService.borrarPorId(id);
+        return ResponseEntity.noContent().build();
+    }
+}
