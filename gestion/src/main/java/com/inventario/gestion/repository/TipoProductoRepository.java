@@ -18,7 +18,8 @@ public interface TipoProductoRepository extends JpaRepository<TipoProducto, Long
 
     @Query
     ("""
-        SELECT FROM TipoProducto tp
+        SELECT tp 
+        FROM TipoProducto tp
         WHERE tp.nombre = :tipoProductoNombre
     """)
     Optional<TipoProducto> obtenerPorNombre(@Param("tipoProductoNombre") String tipoProductoNombre);
@@ -26,7 +27,8 @@ public interface TipoProductoRepository extends JpaRepository<TipoProducto, Long
     @Modifying 
     @Query
     ("""
-        DELETE FROM TipoProducto tp
+        DELETE 
+        FROM TipoProducto tp
         WHERE tp.id = :tipoProductoId
     """)
     int deleteByIdTipoProducto(@Param("tipoProductoId") Long tipoProductoId);

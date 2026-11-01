@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.inventario.gestion.model.Producto;
 
 @Repository 
-public interface ProductoRepository extends JpaRepository<Producto, Long> {
+public interface ProductoRepository extends JpaRepository<Producto,Long> {
 
     boolean existsByNombre(String nombre);
 
@@ -20,15 +20,15 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     ("""
         SELECT p 
         FROM Producto p 
-        LEFT JOIN FETCH TipoProducto tp 
+        LEFT JOIN FETCH p.tipoProducto
     """)
     List<Producto> obtenerTodos();
 
     @Query
     ("""
-        SELECT p 
-        FROM Producto p 
-        LEFT JOIN FETCH TipoProducto tp 
+        SELECT p
+        FROM Producto p
+        LEFT JOIN FETCH p.tipoProducto
         WHERE p.id = :productoId
     """)
     Optional<Producto> obtenerPorId(@Param("productoId") Long productoId);
@@ -36,7 +36,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     @Modifying 
     @Query
     ("""
-        DELETE p 
+        DELETE 
         FROM Producto p 
         WHERE p.id = :productoId
     """)
