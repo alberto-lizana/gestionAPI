@@ -1,7 +1,5 @@
 package com.inventario.gestion.dto;
 
-import com.inventario.gestion.model.TipoProducto;
-
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -23,7 +21,7 @@ public record ProductoRequesDto(
     @Max(value = 999, message = "El stock no puede superar las 999 unidades")
     Long stock,
 
-    @NotNull(message = "El tipo de producto es obligatorio")
-    TipoProducto tipoProducto
+    @NotBlank(message = "El tipo de producto es obligatorio")
+    String nombreTipoProducto
 
 ) {}

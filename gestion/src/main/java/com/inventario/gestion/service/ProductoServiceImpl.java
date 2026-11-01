@@ -59,7 +59,7 @@ public class ProductoServiceImpl implements ProductoService {
         }
 
         TipoProducto tp = tipoProductoRepository
-            .obtenerPorNombre(dto.tipoProducto().getNombre().toLowerCase())
+            .obtenerPorNombre(dto.nombreTipoProducto().toUpperCase())
                 .orElseThrow(() -> new NoSeEncontroElTipoProductoException(TIPO_PRODUCTO_NO_ENCONTRADO));
 
         return ProductoMapper.toDto(productoRepository.save(Producto
@@ -70,6 +70,7 @@ public class ProductoServiceImpl implements ProductoService {
                 .tipoProducto(tp)
             .build())
             );
+        
     }
 
     @Transactional
