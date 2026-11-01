@@ -12,6 +12,8 @@ import com.inventario.gestion.mappers.RolMapper;
 import com.inventario.gestion.model.Rol;
 import com.inventario.gestion.repository.RolRepository;
 
+import static com.inventario.gestion.config.ConstantesErrorResponse.ROL_NO_ENCONTRADO;
+
 @Service 
 public class RolServiceImpl implements RolService {
 
@@ -34,26 +36,28 @@ public class RolServiceImpl implements RolService {
     @Override
     public RolResponseDto obtenerPorId(Long id) {
         return RolMapper.toDto(rolRepository.findById(id)
-            .orElseThrow(() -> new RolNoEncontradoException("Rol no encontrado"))
+            .orElseThrow(() -> new RolNoEncontradoException(ROL_NO_ENCONTRADO))
         );
     }
 
+    /* Peligroso puede Romper la aplicación (Los roles deberían ser fijos en su base en asignación pueden variar)*/
     @Transactional
     @Override
     public RolResponseDto modificarNombre(RolNombreRequestDto dto) {
         Rol rol = rolRepository.findById(dto.idRol())
-            .orElseThrow(() -> new RolNoEncontradoException("Rol no encontrado"));
+            .orElseThrow(() -> new RolNoEncontradoException(ROL_NO_ENCONTRADO));
 
         rol.setNombre(dto.nombre());
 
         return RolMapper.toDto(rol);
     }
 
-
+    /* Peligroso puede Romper la aplicación (Los roles deberían ser fijos en su base en asignación pueden variar) */
+    @Transactional
     @Override
     public void eliminar(Long id) {
         if(rolRepository.deleteByIdRol(id) == 0){
-            throw new RolNoEncontradoException("Rol no encontrado");
+            throw new RolNoEncontradoException(ROL_NO_ENCONTRADO);
         }
     }
 }

@@ -11,6 +11,8 @@ public interface UsuarioService {
 
     UsuarioResponseDto obtenerPorId(Long id);
 
+    UsuarioResponseDto obtenerPorUsername(Object principal);
+
     UsuarioResponseDto crear(UsuarioRequestDto dto);
 
     UsuarioResponseDto borrarLogico(Long id);

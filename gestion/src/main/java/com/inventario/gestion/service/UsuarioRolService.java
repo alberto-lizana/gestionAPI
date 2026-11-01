@@ -4,7 +4,7 @@ public interface UsuarioRolService {
 
     void quitarTodosLosRoles(Long usuarioId);
 
-    void quitarRol(Long usuarioId, Long rolId);
+    void quitarRol(Long rolId, Long usuarioId);
 
     void desasignarRolDeTodosLosUsuarios(Long rolId);
 

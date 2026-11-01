@@ -2,7 +2,6 @@ package com.inventario.gestion.controller;
 
 import java.util.List;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +37,7 @@ public class RolController {
         return ResponseEntity.ok().body(rolService.obtenerPorId(id));
     }
 
-    @PatchMapping("/nombre")
+    @PatchMapping("/modificar-nombre")
     ResponseEntity<RolResponseDto> modificar(@Valid @RequestBody RolNombreRequestDto dto){
         return ResponseEntity.ok().body(rolService.modificarNombre(dto));
     }
@@ -46,6 +45,6 @@ public class RolController {
     @DeleteMapping("/borrar/{id}")
     ResponseEntity<Void> eliminar(@PathVariable Long id){
         rolService.eliminar(id);
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.noContent().build();
     }
 }

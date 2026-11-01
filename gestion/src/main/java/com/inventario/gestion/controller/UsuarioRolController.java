@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.inventario.gestion.service.UsuarioRolService;
 
-
-
 @RestController 
 @RequestMapping("/usuario-rol")
 public class UsuarioRolController {
@@ -28,9 +26,9 @@ public class UsuarioRolController {
     }
 
     // Quita un rol específico a un usuario específico
-    @DeleteMapping("/roles/{usuarioId}")
-    public ResponseEntity<Void> quitarRol(@PathVariable Long usuarioId, @PathVariable Long rolId) {
-        usuarioRolService.quitarRol(usuarioId, rolId);
+    @DeleteMapping("/roles/{rolId}/usuario/{usuarioId}")
+    public ResponseEntity<Void> quitarRol(@PathVariable Long rolId, @PathVariable Long usuarioId) {
+        usuarioRolService.quitarRol(rolId, usuarioId);
         return ResponseEntity.noContent().build();
     }
 
