@@ -4,11 +4,13 @@ import static com.inventario.gestion.config.ConstantesErrorResponse.PRODCUTO_NO_
 import static com.inventario.gestion.config.ConstantesErrorResponse.PRODUCTO_EXISTENTE;
 import static com.inventario.gestion.config.ConstantesErrorResponse.TIPO_PRODUCTO_NO_ENCONTRADO;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+import com.inventario.gestion.dto.ProductoModificarDto;
 import com.inventario.gestion.dto.ProductoRequesDto;
 import com.inventario.gestion.dto.ProductoRequestNombreDto;
 import com.inventario.gestion.dto.ProductoRequestPrecioDto;
@@ -18,6 +20,7 @@ import com.inventario.gestion.dto.ProductoResponseDto;
 import com.inventario.gestion.exception.NoSeEncontroElTipoProductoException;
 import com.inventario.gestion.exception.ProductoExistenteException;
 import com.inventario.gestion.exception.ProductoNoEncontradoException;
+import com.inventario.gestion.exception.TipoProductoNoEncontradoException;
 import com.inventario.gestion.mappers.ProductoMapper;
 import com.inventario.gestion.model.Producto;
 import com.inventario.gestion.model.TipoProducto;
@@ -40,11 +43,9 @@ public class ProductoServiceImpl implements ProductoService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<ProductoResponseDto> obtenerTodos() {
-        return productoRepository.obtenerTodos()
-            .stream()
-            .map(ProductoMapper::toDto)
-            .toList();
+    public Page<ProductoResponseDto> obtenerTodos(Pageable pageable) {
+        return productoRepository.obtenerTodos(pageable)
+            .map(ProductoMapper::toDto);
     }
 
     @Transactional(readOnly = true)
@@ -83,6 +84,39 @@ public class ProductoServiceImpl implements ProductoService {
         if(productoRepository.borrarPorId(id) == 0){
             throw new ProductoNoEncontradoException(PRODCUTO_NO_ENCONTRADO);
         }
+    }
+
+    @Override
+    @Transactional
+    public ProductoResponseDto modificar(ProductoModificarDto dto) {
+
+        Producto producto = obtenerProductoPorId(dto.id());
+
+        if (!producto.getNombre().equalsIgnoreCase(dto.nombre().trim())) {
+            producto.setNombre(dto.nombre().trim().toUpperCase());
+        }
+
+        if (producto.getPrecio().compareTo(dto.precio()) != 0) {
+            producto.setPrecio(dto.precio());
+        }
+
+        if (!producto.getStock().equals(dto.stock())) {
+            producto.setStock(dto.stock());
+        }
+
+        if (!producto.getTipoProducto().getNombre()
+                .equalsIgnoreCase(dto.nombreTipoProducto().trim())) {
+
+            TipoProducto tipoProducto = tipoProductoRepository
+                    .obtenerPorNombre(dto.nombreTipoProducto().trim().toUpperCase())
+                    .orElseThrow(() -> new TipoProductoNoEncontradoException(
+                            "No existe el tipo de producto indicado"
+                    ));
+
+            producto.setTipoProducto(tipoProducto);
+        }
+
+        return ProductoMapper.toDto(producto);
     }
 
     @Transactional 

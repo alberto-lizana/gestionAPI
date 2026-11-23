@@ -1,8 +1,9 @@
 package com.inventario.gestion.repository;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,13 +17,18 @@ public interface ProductoRepository extends JpaRepository<Producto,Long> {
 
     boolean existsByNombre(String nombre);
 
-    @Query
-    ("""
-        SELECT p 
-        FROM Producto p 
-        LEFT JOIN FETCH p.tipoProducto
-    """)
-    List<Producto> obtenerTodos();
+    @Query(
+        value = """
+            SELECT p
+            FROM Producto p
+            LEFT JOIN FETCH p.tipoProducto
+        """,
+        countQuery = """
+            SELECT COUNT(p)
+            FROM Producto p
+        """
+    )
+    Page<Producto> obtenerTodos(Pageable pageable);
 
     @Query
     ("""

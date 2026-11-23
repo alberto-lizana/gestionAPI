@@ -46,7 +46,7 @@ public class AdminInitializer implements ApplicationRunner {
 
     @Transactional 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
 
         Map<String, Rol> rolesPorNombre = rolRepository.obtenerTodosLosRoles()
             .stream()

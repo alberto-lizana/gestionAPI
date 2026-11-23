@@ -1,7 +1,9 @@
 package com.inventario.gestion.service;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
+import com.inventario.gestion.dto.ProductoModificarDto;
 import com.inventario.gestion.dto.ProductoRequesDto;
 import com.inventario.gestion.dto.ProductoRequestNombreDto;
 import com.inventario.gestion.dto.ProductoRequestPrecioDto;
@@ -11,11 +13,13 @@ import com.inventario.gestion.dto.ProductoResponseDto;
 
 public interface ProductoService {
 
-    List<ProductoResponseDto> obtenerTodos();
+    Page<ProductoResponseDto> obtenerTodos(Pageable pageable);
 
     ProductoResponseDto obtenerPorId(Long id);
 
     ProductoResponseDto crear(ProductoRequesDto dto);
+
+    ProductoResponseDto modificar(ProductoModificarDto dto);
     
     void borrar(Long id);
 
