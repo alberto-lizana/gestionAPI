@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +14,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.inventario.gestion.dto.ProductoRequesDto;
+import com.inventario.gestion.dto.ProductoRequestNombreDto;
+import com.inventario.gestion.dto.ProductoRequestPrecioDto;
+import com.inventario.gestion.dto.ProductoRequestStockDto;
+import com.inventario.gestion.dto.ProductoRequestTipoProductoDto;
 import com.inventario.gestion.dto.ProductoResponseDto;
 import com.inventario.gestion.service.ProductoService;
 
@@ -47,6 +52,27 @@ public class ProductoController {
     ResponseEntity<Void> borrar(@PathVariable Long id){
         productoService.borrar(id);
         return ResponseEntity.noContent().build();
+    }
+
+
+    @PatchMapping("/modificar-nombre")
+    ResponseEntity<ProductoResponseDto> modificarNombre(@Valid @RequestBody ProductoRequestNombreDto dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(productoService.modificarNombre(dto));
+    }
+
+    @PatchMapping("/modificar-precio")
+    ResponseEntity<ProductoResponseDto> modificarPrecio(@Valid @RequestBody ProductoRequestPrecioDto dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(productoService.modificarPrecio(dto));
+    }
+
+    @PatchMapping("/modificar-stock")
+    ResponseEntity<ProductoResponseDto> modificarStock(@Valid @RequestBody ProductoRequestStockDto dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(productoService.modificarStock(dto));
+    }
+
+    @PatchMapping("/modificar-tipo_producto")
+    ResponseEntity<ProductoResponseDto> modificarTipoProducto(@Valid @RequestBody ProductoRequestTipoProductoDto dto){
+        return ResponseEntity.status(HttpStatus.CREATED).body(productoService.modificarTipoProducto(dto));
     }
 
 }

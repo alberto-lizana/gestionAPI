@@ -3,6 +3,10 @@ package com.inventario.gestion.security;
 import static com.inventario.gestion.security.TokenJwtConfig.HEADER_AUTHORIZATION;
 import static com.inventario.gestion.security.TokenJwtConfig.PREFIX_TOKEN;
 import static com.inventario.gestion.security.TokenJwtConfig.SECRET_KEY;
+import static com.inventario.gestion.security.TokenJwtConfig.CONTENT_TYPE;
+import static com.inventario.gestion.config.ConstantesErrorResponse.TOKEN_INVALIDO;
+import static com.inventario.gestion.config.ConstantesErrorResponse.TOKEN_SIN_AUTHORITIES;
+import static com.inventario.gestion.config.ConstantesErrorResponse.UTF;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -54,7 +58,7 @@ public class JwtValidationFilter extends OncePerRequestFilter {
             Object authoritiesClaim = claims.get("authorities");
 
             if (!(authoritiesClaim instanceof List<?> roles) || !roles.stream().allMatch(String.class::isInstance)) {
-                throw new JwtException("El token no contiene authorities");
+                throw new JwtException(TOKEN_SIN_AUTHORITIES);
             }
 
             List<GrantedAuthority> authorities = roles.stream()
@@ -72,14 +76,15 @@ public class JwtValidationFilter extends OncePerRequestFilter {
             SecurityContextHolder.clearContext();
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
+            response.setContentType(CONTENT_TYPE);
+            response.setCharacterEncoding(UTF);
 
-            ErrorExceptionResponseDto error = ErrorExceptionResponseDto.builder()
-                .mensaje("El token JWT no es válido o ha expirado")
-                .status(HttpServletResponse.SC_UNAUTHORIZED)
-                .timestamp(LocalDateTime.now())
-                .path(request.getRequestURI())
+            ErrorExceptionResponseDto error = ErrorExceptionResponseDto
+                .builder()
+                    .mensaje(TOKEN_INVALIDO)
+                    .status(HttpServletResponse.SC_UNAUTHORIZED)
+                    .timestamp(LocalDateTime.now())
+                    .path(request.getRequestURI())
                 .build();
 
             new ObjectMapper().writeValue(response.getWriter(), error);

@@ -1,5 +1,7 @@
 package com.inventario.gestion.config;
 
+import com.inventario.gestion.enums.RolEnum;
+
 public class ConstantesErrorResponse {
 
     // PRODUCTO
@@ -20,4 +22,14 @@ public class ConstantesErrorResponse {
     public static final String CREDENCIALES_EXISTENTES = "El nombre de usuario o email ya existen.";
     public static final String USUARIO_NO_ENCONTRADO = "El nombre de usuario o email ya existen.";
 
+    // JWT 
+    public static final String TOKEN_INVALIDO = "El token JWT no es válido o ha expirado.";
+    public static final String TOKEN_SIN_AUTHORITIES = "El token no contiene authorities.";
+    public static final String UTF = "UTF-8";
+
+
+    // ROLES
+    public static final String ADMIN = RolEnum.ROLE_ADMINISTRADOR.nombreSinPrefijo();
+    public static final String GESTION_INVENTARIO = RolEnum.ROLE_GESTION_INVENTARIO.nombreSinPrefijo();
+    public static final String USUARIO = RolEnum.ROLE_USUARIO.nombreSinPrefijo();
 }

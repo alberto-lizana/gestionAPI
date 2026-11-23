@@ -22,6 +22,7 @@ public record ProductoRequesDto(
     Long stock,
 
     @NotBlank(message = "El tipo de producto es obligatorio")
+    @Size(max = 125, message = "El nombre del tipo producto debe tener como máximo 125 caracteres")
     String nombreTipoProducto
 
 ) {}

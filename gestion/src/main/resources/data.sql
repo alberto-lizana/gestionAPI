@@ -18,6 +18,7 @@ VALUES
     ('FUENTES DE PODER', 'FUENTES DE ALIMENTACION PARA COMPUTADORES'),
     ('CONSOLAS', 'CONSOLAS DE VIDEOJUEGOS');
 
+
 /*POBLAMIENTO DE PRODUCTOS */
 INSERT INTO productos (nombre, precio, stock, tipo_producto_id, fecha_creacion, fecha_actualizacion)
 VALUES

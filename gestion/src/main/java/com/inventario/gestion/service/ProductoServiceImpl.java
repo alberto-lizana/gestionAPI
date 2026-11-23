@@ -10,6 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.inventario.gestion.dto.ProductoRequesDto;
+import com.inventario.gestion.dto.ProductoRequestNombreDto;
+import com.inventario.gestion.dto.ProductoRequestPrecioDto;
+import com.inventario.gestion.dto.ProductoRequestStockDto;
+import com.inventario.gestion.dto.ProductoRequestTipoProductoDto;
 import com.inventario.gestion.dto.ProductoResponseDto;
 import com.inventario.gestion.exception.NoSeEncontroElTipoProductoException;
 import com.inventario.gestion.exception.ProductoExistenteException;
@@ -64,7 +68,7 @@ public class ProductoServiceImpl implements ProductoService {
 
         return ProductoMapper.toDto(productoRepository.save(Producto
             .builder()
-                .nombre(dto.nombre())
+                .nombre(dto.nombre().toUpperCase())
                 .precio(dto.precio())
                 .stock(dto.stock())
                 .tipoProducto(tp)
@@ -79,6 +83,54 @@ public class ProductoServiceImpl implements ProductoService {
         if(productoRepository.borrarPorId(id) == 0){
             throw new ProductoNoEncontradoException(PRODCUTO_NO_ENCONTRADO);
         }
+    }
+
+    @Transactional 
+    @Override
+    public ProductoResponseDto modificarNombre(ProductoRequestNombreDto dto) {
+        Producto prod = obtenerProductoPorId(dto.idProducto());
+        
+        prod.setNombre(dto.nombre().toUpperCase());
+
+        return ProductoMapper.toDto(prod);
+    }
+
+    @Transactional 
+    @Override
+    public ProductoResponseDto modificarPrecio(ProductoRequestPrecioDto dto) {
+        Producto prod = obtenerProductoPorId(dto.idProducto());
+        
+        prod.setPrecio(dto.precio());
+
+        return ProductoMapper.toDto(prod);
+    }
+
+    @Transactional 
+    @Override
+    public ProductoResponseDto modificarStock(ProductoRequestStockDto dto) {
+        Producto prod = obtenerProductoPorId(dto.idProducto());
+
+        prod.setStock(dto.stock());
+
+        return ProductoMapper.toDto(prod);
+    }
+
+    @Transactional 
+    @Override
+    public ProductoResponseDto modificarTipoProducto(ProductoRequestTipoProductoDto dto) {
+        Producto prod = obtenerProductoPorId(dto.idProducto());
+
+        TipoProducto tp = tipoProductoRepository.obtenerPorNombre(dto.nombreTipoProducto().toUpperCase())
+            .orElseThrow(() -> new NoSeEncontroElTipoProductoException(TIPO_PRODUCTO_NO_ENCONTRADO));
+
+        prod.setTipoProducto(tp);
+
+        return ProductoMapper.toDto(prod);
+    }
+
+    private Producto obtenerProductoPorId(Long id){
+        return productoRepository.obtenerPorId(id)
+            .orElseThrow(() -> new ProductoNoEncontradoException(PRODCUTO_NO_ENCONTRADO));
     }
 
 }
