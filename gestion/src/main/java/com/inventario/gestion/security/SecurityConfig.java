@@ -113,25 +113,21 @@ public class SecurityConfig {
 
         CorsConfiguration configuration = new CorsConfiguration();
 
-        // 1. Orígenes autorizados
         configuration.setAllowedOrigins(
-            List.of("http://localhost:4200")
+            List.of("http://localhost:4202", "http://localhost:4200")
+            
         );
 
-        // 2. Métodos HTTP permitidos
         configuration.setAllowedMethods(
             List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
         );
 
-        // 3. Encabezados HTTP permitidos
         configuration.setAllowedHeaders(
             List.of("Content-Type", "Authorization")
         );
 
-        // 4. No utilizamos autenticación mediante cookies
         configuration.setAllowCredentials(false);
 
-        // 5. Duración de la autorización preflight
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source =
